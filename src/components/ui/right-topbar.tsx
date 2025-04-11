@@ -7,7 +7,7 @@ export default function RightTopBar() {
       <HStack gap={4}>
         <Link href="/help">Help Center</Link>
         <Separator orientation={"vertical"} height={4} />
-        <Link href="/login">My Account</Link>
+        <Link href="/account">My Account</Link>
       </HStack>
     </Box>
   );

@@ -4,6 +4,7 @@ import Header from "@/components/shared/header";
 import TopBar from "@/components/shared/topbar";
 import NavBar from "@/components/shared/navbar";
 import HeroSection from "@/components/ui/hero-section";
+import CategorySlider from "@/components/ui/category-slider";
 import { Box, Heading, Text, Button, SimpleGrid } from "@chakra-ui/react";
 import Link from "next/link";
 
@@ -14,6 +15,7 @@ export default function Home() {
       <Header />
       <NavBar />
       <HeroSection />
+      <CategorySlider />
       <Box py={10} px={40}>
         <Heading size="lg" mb={6}>
           Shop by Category
