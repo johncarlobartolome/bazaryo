@@ -1,96 +1,19 @@
 "use client";
 
-import TopBar from "@/components/topbar";
-import {
-  Box,
-  Flex,
-  VStack,
-  Heading,
-  Text,
-  Button,
-  Image,
-  SimpleGrid,
-  InputGroup,
-  Input,
-  Spacer,
-  HStack,
-  IconButton,
-} from "@chakra-ui/react";
+import Header from "@/components/shared/header";
+import TopBar from "@/components/shared/topbar";
+import NavBar from "@/components/shared/navbar";
+import HeroSection from "@/components/ui/hero-section";
+import { Box, Heading, Text, Button, SimpleGrid } from "@chakra-ui/react";
 import Link from "next/link";
-import { LuSearch, LuShoppingCart, LuCircleUserRound } from "react-icons/lu";
 
 export default function Home() {
   return (
     <Box>
       <TopBar />
-      <Box
-        bg="white"
-        px={40}
-        py={4}
-        boxShadow={"md"}
-        position="sticky"
-        top={0}
-        zIndex={100}
-      >
-        <Flex align="center">
-          <Link href="/">
-            <Heading size="lg" color="teal.500">
-              Bazaryo
-            </Heading>
-          </Link>
-          <InputGroup mx={6} maxW="500px" flex="1" startElement={<LuSearch />}>
-            <Input type="text" placeholder="Search products..." />
-          </InputGroup>
-          <Spacer />
-          <HStack gap={4}>
-            <Link href="/marketplace">Marketplace</Link>
-            <Link href="/about">About</Link>
-            <Link href="/contact">Contact</Link>
-            <Link href="/cart">
-              <IconButton aria-label="Cart" variant={"ghost"}>
-                <LuShoppingCart />
-              </IconButton>
-            </Link>
-            <Link href="/login">
-              <IconButton aria-label="Login" variant={"ghost"}>
-                <LuCircleUserRound />
-              </IconButton>
-            </Link>
-          </HStack>
-        </Flex>
-      </Box>
-      <Flex
-        direction={{ base: "column", md: "row" }}
-        justify="space-between"
-        align="center"
-        bg="gray.50"
-        py={8}
-        px={40}
-      >
-        <VStack align="start" flex={1}>
-          <Heading as="h1" size="2xl">
-            Welcome to Bazaryo
-          </Heading>
-          <Text fontSize="lg">
-            Discover your next favorite product from trusted local vendors.
-          </Text>
-          <Link href="/marketplace">
-            <Button colorPalette={"teal"} size={"lg"}>
-              Shop Now
-            </Button>
-          </Link>
-        </VStack>
-        <Box flex={1} mt={{ base: 8, md: 0 }}>
-          <Image
-            src="/images/hero-banner.png"
-            alt="Bazaryo Marketplace"
-            borderRadius={"xl"}
-            objectFit="cover"
-            width={"100%"}
-            height={{ base: "200px", md: "300px" }}
-          />
-        </Box>
-      </Flex>
+      <Header />
+      <NavBar />
+      <HeroSection />
       <Box py={10} px={40}>
         <Heading size="lg" mb={6}>
           Shop by Category

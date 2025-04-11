@@ -1,8 +1,8 @@
 "use client";
 
 import { Box, Flex } from "@chakra-ui/react";
-import LeftTopBar from "./left-topbar";
-import RightTopBar from "./right-topbar";
+import LeftTopBar from "../ui/left-topbar";
+import RightTopBar from "../ui/right-topbar";
 
 export default function TopBar() {
   return (
