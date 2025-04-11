@@ -30,7 +30,7 @@ enum OrderStatus {
 
 model User {
   id        Int       @id @default(autoincrement())
-  email     String
+  email     String    @unique
   password  String
   name      String
   role      Role
