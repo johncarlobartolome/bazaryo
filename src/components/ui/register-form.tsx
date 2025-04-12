@@ -15,6 +15,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { signup } from "@/lib/services/auth";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function RegisterForm() {
   const [form, setForm] = useState({
@@ -32,6 +33,7 @@ export default function RegisterForm() {
     role: "",
   });
   const router = useRouter();
+  const { login } = useAuth();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleInputChange = (e: { target: { name: any; value: any } }) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -40,12 +42,16 @@ export default function RegisterForm() {
   const handleRegister = async () => {
     try {
       const response = await signup(form);
-      localStorage.setItem("token", response.data.token);
+      const { token, user } = response.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      login(token, user);
       if (form.role === "CUSTOMER") {
         router.push("/");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
+      console.log(error);
       const details = error.response.data.error.details;
       const flatDetails = Object.fromEntries(
         Object.entries(details).map(([key, value]) => [
