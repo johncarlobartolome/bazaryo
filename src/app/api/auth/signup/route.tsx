@@ -2,40 +2,71 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
 import { generateToken } from "@/lib/auth";
+import { schema } from "@/lib/validation/signupSchema";
+import { $Enums } from "@/generated/prisma";
 
 export async function POST(req: Request) {
-  const body = await req.json();
-  const { email, password, name, role } = body;
+  try {
+    const body = await req.json();
 
-  if (!email || !password || !name || !role) {
-    return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+    const result = await schema.safeParseAsync(body);
+
+    if (!result.success) {
+      const errors = result.error.flatten().fieldErrors;
+      return NextResponse.json(
+        {
+          status: false,
+          message: "Validation failed",
+          data: null,
+          error: {
+            code: "VALIDATION_ERROR",
+            details: errors,
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+    const { fullName, email, password, role: roleString } = result.data;
+
+    const role = roleString as $Enums.Role;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await prisma.user.create({
+      data: {
+        email,
+        fullName,
+        password: hashedPassword,
+        role,
+      },
+    });
+
+    const token = generateToken({ userId: user.id, role: user.role });
+
+    return NextResponse.json({
+      success: true,
+      message: "User signup successful",
+      token,
+      user: {
+        id: user.id,
+        fullName: user.fullName,
+        email: user.email,
+        role: user.role,
+      },
+      error: null,
+    });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Unexpected server error",
+        error: {
+          code: "SERVER_ERROR",
+        },
+      },
+      { status: 500 }
+    );
   }
-
-  const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing) {
-    return NextResponse.json({ error: "User already exists" }, { status: 409 });
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const user = await prisma.user.create({
-    data: {
-      email,
-      name,
-      password: hashedPassword,
-      role,
-    },
-  });
-
-  const token = generateToken({ userId: user.id, role: user.role });
-
-  return NextResponse.json({
-    token,
-    user: {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-    },
-  });
 }

@@ -31,7 +31,7 @@ export default function LoginForm() {
         <Fieldset.Content>
           <Field.Root>
             <Field.Label>Username</Field.Label>
-            <Input name="username" size={"lg"} />
+            <Input name="username" />
           </Field.Root>
           <Field.Root>
             <Field.Label>Password</Field.Label>
