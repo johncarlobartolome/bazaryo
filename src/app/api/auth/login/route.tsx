@@ -24,7 +24,11 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { username, password } = body;
 
-    const user = await prisma.user.findUnique({ where: { email: username } });
+    const user = await prisma.user.findUnique({
+      where: { email: username },
+      include: { vendor: true },
+    });
+    console.log(user);
     if (!user) {
       return errorMessage;
     }
@@ -32,6 +36,7 @@ export async function POST(req: Request) {
     if (!isValid) {
       return errorMessage;
     }
+
     const token = generateToken({ userId: user.id, role: user.role });
 
     return NextResponse.json({
@@ -43,6 +48,12 @@ export async function POST(req: Request) {
         fullName: user.fullName,
         email: user.email,
         role: user.role,
+        vendor: user.vendor
+          ? {
+              id: user.vendor.id,
+              verification: user.vendor.verification,
+            }
+          : null,
       },
       error: null,
     });

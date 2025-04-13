@@ -1,5 +1,6 @@
 "use client";
 
+import VendorPendingMessage from "@/components/ui/vendor-pending";
 import VendorRegisterForm from "@/components/ui/vendor-register-form";
 import { Heading, HStack, Box } from "@chakra-ui/react";
 
@@ -10,6 +11,7 @@ export default function VendorSetupPage() {
         <Heading py={6}>Vendor Setup</Heading>
       </HStack>
       <VendorRegisterForm />
+      <VendorPendingMessage />
     </Box>
   );
 }
