@@ -122,6 +122,7 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   fullName: 'fullName',
+  verification: 'verification',
   role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -131,9 +132,14 @@ exports.Prisma.VendorScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   storeName: 'storeName',
-  bio: 'bio',
+  storeDescription: 'storeDescription',
+  storeLogo: 'storeLogo',
+  storeBanner: 'storeBanner',
+  storePhone: 'storePhone',
+  storeLocation: 'storeLocation',
   verification: 'verification',
-  balance: 'balance'
+  balance: 'balance',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -147,14 +153,13 @@ exports.Prisma.UserOrderByRelevanceFieldEnum = {
   fullName: 'fullName'
 };
 
-exports.Prisma.NullsOrder = {
-  first: 'first',
-  last: 'last'
-};
-
 exports.Prisma.VendorOrderByRelevanceFieldEnum = {
   storeName: 'storeName',
-  bio: 'bio'
+  storeDescription: 'storeDescription',
+  storeLogo: 'storeLogo',
+  storeBanner: 'storeBanner',
+  storePhone: 'storePhone',
+  storeLocation: 'storeLocation'
 };
 exports.Role = exports.$Enums.Role = {
   CUSTOMER: 'CUSTOMER',

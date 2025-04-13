@@ -1,40 +1,48 @@
-import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
+import { prisma } from "@/lib/prisma";
 import { generateToken } from "@/lib/auth";
 
+// import { generateToken } from "@/lib/auth";
+
 export async function POST(req: Request) {
+  const errorMessage = NextResponse.json(
+    {
+      status: false,
+      message: "Invalid credentials",
+      data: null,
+      error: {
+        code: "INVALID_CREDENTIALS",
+        details: {
+          username: ["Invalid credentials"],
+        },
+      },
+    },
+    { status: 401 }
+  );
   try {
     const body = await req.json();
-    const { email, password } = body;
-    const user = await prisma.user.findUnique({ where: { email } });
+    const { username, password } = body;
+
+    const user = await prisma.user.findUnique({ where: { email: username } });
     if (!user) {
-      return NextResponse.json(
-        { error: "Invalid credentials" },
-        { status: 401 }
-      );
+      return errorMessage;
     }
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
-      return NextResponse.json(
-        { error: "Invalid credentials" },
-        { status: 401 }
-      );
+      return errorMessage;
     }
-
     const token = generateToken({ userId: user.id, role: user.role });
 
     return NextResponse.json({
-      success: false,
-      message: "Login successful",
-      data: {
-        token,
-        user: {
-          id: user.id,
-          fullName: user.fullName,
-          email: user.email,
-          role: user.role,
-        },
+      success: true,
+      message: "User signup successful",
+      token,
+      user: {
+        id: user.id,
+        fullName: user.fullName,
+        email: user.email,
+        role: user.role,
       },
       error: null,
     });

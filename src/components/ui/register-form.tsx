@@ -16,6 +16,7 @@ import { useState } from "react";
 import { signup } from "@/lib/services/auth";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import getFlatDetailsFromErrors from "@/utils/getFlatDetailsFromErrors";
 
 export default function RegisterForm() {
   const [form, setForm] = useState({
@@ -43,22 +44,14 @@ export default function RegisterForm() {
     try {
       const response = await signup(form);
       const { token, user } = response.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
       login(token, user);
       if (form.role === "CUSTOMER") {
         router.push("/");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.log(error);
       const details = error.response.data.error.details;
-      const flatDetails = Object.fromEntries(
-        Object.entries(details).map(([key, value]) => [
-          key,
-          (value as string[])[0],
-        ])
-      );
+      const flatDetails = getFlatDetailsFromErrors(details);
       setErrors((prev) => ({
         ...prev,
         ...flatDetails,
