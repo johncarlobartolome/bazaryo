@@ -5,6 +5,10 @@ type UserType = {
   id: string;
   fullName: string;
   email: string;
+  vendor: {
+    id: string;
+    verification: boolean;
+  };
 };
 
 type AuthContextType = {
